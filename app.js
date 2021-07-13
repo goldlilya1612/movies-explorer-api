@@ -19,7 +19,7 @@ const { requestLogger, errorLogger } = require("./middlewares/logger");
 const { errorHandler } = require("./middlewares/error-handler");
 const { limiter } = require("./middlewares/limiter");
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3005 } = process.env;
 const { DATA_BASE, NODE_ENV } = process.env;
 const app = express();
 
