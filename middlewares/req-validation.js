@@ -32,6 +32,7 @@ module.exports.movieDataValidation = celebrate({
     thumbnail: Joi.string()
       .regex(/(http|https):\/\/(www\.)?\S*/)
       .required(),
+    movieId: Joi.number().required(),
   }),
 });
 
