@@ -1,4 +1,5 @@
 const { celebrate, Joi } = require("celebrate");
+const validator = require("validator");
 
 module.exports.paramsValidation = celebrate({
   params: Joi.object().keys({
@@ -22,16 +23,31 @@ module.exports.movieDataValidation = celebrate({
     year: Joi.string().required(),
     description: Joi.string().allow("").required(),
     image: Joi.string()
-      .regex(/(http|https):\/\/(www\.)?\S*/)
-      .required(),
+      .required()
+      .custom((value, helpers) => {
+        if (validator.isURL(value)) {
+          return value;
+        }
+        return helpers.message("Неверный формат ссылки");
+      }),
     trailer: Joi.string()
-      .regex(/(http|https):\/\/(www\.)?\S*/)
-      .required(),
+      .required()
+      .custom((value, helpers) => {
+        if (validator.isURL(value)) {
+          return value;
+        }
+        return helpers.message("Неверный формат ссылки");
+      }),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
     thumbnail: Joi.string()
-      .regex(/(http|https):\/\/(www\.)?\S*/)
-      .required(),
+      .required()
+      .custom((value, helpers) => {
+        if (validator.isURL(value)) {
+          return value;
+        }
+        return helpers.message("Неверный формат ссылки");
+      }),
     movieId: Joi.number().required(),
   }),
 });

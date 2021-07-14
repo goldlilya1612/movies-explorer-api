@@ -7,12 +7,18 @@ const NotFoundError = require("../errors/not-found-err");
 const BadRequestError = require("../errors/bad-request-err");
 const ConflictError = require("../errors/conflict-err");
 
+const {
+  MESSAGE_ERROR_404,
+  MESSAGE_ERROR_400,
+  MESSAGE_ERROR_409,
+} = require("../utils/constants");
+
 // возвращение текущего пользователя
 const returnCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        return next(new NotFoundError("Пользователь не найден"));
+        return next(new NotFoundError(MESSAGE_ERROR_404));
       }
       return res.send({
         name: user.name,
@@ -32,7 +38,7 @@ const updateCurrentUser = (req, res, next) => {
   )
     .then((user) => {
       if (!user) {
-        throw new NotFoundError("Нет пользователя с таким id");
+        throw new NotFoundError(MESSAGE_ERROR_404);
       } else {
         res.send({
           name: user.name,
@@ -42,12 +48,11 @@ const updateCurrentUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.message === "CastError" || err.message === "ValidationError") {
-        throw new BadRequestError("Переданы некорректные данные");
+        throw new BadRequestError(MESSAGE_ERROR_400);
       } else if (err.name === "MongoError" && err.code === 11000) {
-        throw new ConflictError(
-          "Пользователь с таким email уже зарегистрирован"
-        );
+        throw new ConflictError(MESSAGE_ERROR_409);
       }
+      throw err;
     })
     .catch(next);
 };
@@ -71,12 +76,11 @@ const createUser = (req, res, next) => {
       })
       .catch((err) => {
         if (err.message === "CastError" || err.message === "ValidationError") {
-          throw new BadRequestError("Переданы некорректные данные");
+          throw new BadRequestError(MESSAGE_ERROR_400);
         } else if (err.name === "MongoError" && err.code === 11000) {
-          throw new ConflictError(
-            "Пользователь с таким email уже зарегистрирован"
-          );
+          throw new ConflictError(MESSAGE_ERROR_409);
         }
+        throw err;
       })
       .catch(next);
   });
@@ -93,7 +97,7 @@ const login = (req, res, next) => {
       res.send(token);
     })
     .catch(() => {
-      throw new BadRequestError("Переданы некорректные данные");
+      throw new BadRequestError(MESSAGE_ERROR_400);
     })
     .catch(next);
 };

@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { userRoutes } = require("./user");
 const { movieRoutes } = require("./movie");
+
 const NotFoundError = require("../errors/not-found-err");
 
 router.use(userRoutes);
