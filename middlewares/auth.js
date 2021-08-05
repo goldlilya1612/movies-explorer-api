@@ -25,6 +25,7 @@ module.exports = (req, res, next) => {
   } catch (err) {
     throw new UnauthorizedError(MESSAGE_ERROR_401);
   }
+
   req.user = payload;
 
   next();
