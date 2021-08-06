@@ -19,6 +19,14 @@ const { BASE } = require("./utils/constants");
 
 const app = express();
 
+const allowedCors = [
+  "https://diploma.nomoredomains.work",
+  "http://diploma.nomoredomains.work",
+  "https://api.diploma.nomoredomains.work",
+  "http://api.diploma.nomoredomains.work",
+  "http://localhost:3005",
+];
+
 mongoose.connect(NODE_ENV === "production" ? DATA_BASE : BASE, {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -28,7 +36,14 @@ mongoose.connect(NODE_ENV === "production" ? DATA_BASE : BASE, {
 
 app.use(helmet()); // защита HTTP-заголовков
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: allowedCors,
+    credentials: true,
+    methods: "GET,PUT,PATCH,POST,DELETE",
+    allowedHeaders: "Origin,Content-Type,Accept",
+  })
+);
 app.use(requestLogger);
 app.use(limiter); // лимитер запросов
 app.use(router);
