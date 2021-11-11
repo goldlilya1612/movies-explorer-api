@@ -20,6 +20,7 @@
 **Технологии**
 * Node.js
 * Express.js
+
 Использовалась СУБД MongoDB.
 
 Домен для фронтенда - https://diploma.nomoredomains.work .
